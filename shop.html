@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Emporium | Ruchil's Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <style>
+        /* Custom CSS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        .product-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #f72585, #7209b7);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        /* Dark mode */
+        [data-theme="dark"] {
+            --tw-bg-opacity: 1;
+            background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+            color: white;
+        }
+        [data-theme="dark"] .bg-white {
+            background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+        }
+        [data-theme="dark"] .text-gray-800 {
+            color: white;
+        }
+        [data-theme="dark"] .border-gray-200 {
+            border-color: rgb(55 65 81 / var(--tw-bg-opacity));
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Product details modal */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        /* Mobile menu animation */
+        .mobile-menu {
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Cookie Consent -->
+    <div id="cookieConsent" class="hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <p class="mb-4 md:mb-0 text-sm md:text-base">We use cookies to enhance your experience. By continuing, you agree to our <a href="#" class="text-blue-400 hover:underline">Privacy Policy</a> and <a href="#" class="text-blue-400 hover:underline">Cookie Policy</a>.</p>
+            <div class="flex space-x-4">
+                <button id="cookieDecline" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded text-sm">Decline</button>
+                <button id="cookieAccept" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">Accept All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="flex flex-col items-center">
+            <div class="spinner border-4 border-t-blue-500 border-r-blue-500 border-b-blue-500 border-l-transparent rounded-full w-12 h-12 mb-4"></div>
+            <p class="text-white">Loading luxury experience...</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-900 shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-2">
+                    <i class="fas fa-crown text-3xl text-purple-600"></i>
+                    <span class="text-2xl font-bold text-gray-800 dark:text-white">Ruchil's Shop</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-800 dark:text-white hover:text-blue-600 transition">Home</a>
+                    <a href="#" class="text-blue-600 font-medium">Shop</a>
+                    <a href="#" class="text-gray-800 dark:text-white hover:text-blue-600 transition">Collections</a>
+                    <a href="#" class="text-gray-800 dark:text-white hover:text-blue-600 transition">VIP Lounge</a>
+                    <div class="relative group">
+                        <button class="text-gray-800 dark:text-white hover:text-blue-600 transition flex items-center">
+                            Categories <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="#watches" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">Watches</a>
+                            <a href="#jewelry" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">Jewelry</a>
+                            <a href="#gaming" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">Gaming</a>
+                            <a href="#accessories" class="block px-4 py-2 text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">Accessories</a>
+                        </div>
+                    </div>
+                    <button id="viewCartBtn" class="relative">
+                        <i class="fas fa-shopping-bag text-2xl text-gray-800 dark:text-white hover:text-blue-600 transition"></i>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button id="wishlistBtn" class="relative">
+                        <i class="fas fa-heart text-2xl text-gray-800 dark:text-white hover:text-red-500 transition"></i>
+                        <span id="wishlistCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-moon text-gray-800 dark:text-white"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button id="viewCartBtnMobile" class="relative">
+                        <i class="fas fa-shopping-bag text-xl text-gray-800 dark:text-white"></i>
+                        <span id="cartCountMobile" class="absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">0</span>
+                    </button>
+                    <button id="mobileMenuButton" class="text-gray-800 dark:text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div id="mobileMenu" class="mobile-menu md:hidden hidden mt-4 pb-4">
+                <div class="flex flex-col space-y-3">
+                    <a href="index.html" class="text-gray-800 dark:text-white hover:text-blue-600 transition">Home</a>
+                    <a href="#" class="text-blue-600 font-medium">Shop</a>
+                    <a href="#" class="text-gray-800 dark:text-white hover:text-blue-600 transition">Collections</a>
+                    <a href="#Jewelry" class="text-gray-800 dark:text-white hover:text-blue-600 transition">VIP Lounge</a>
+                    <div class="pt-2">
+                        <p class="font-medium text-gray-800 dark:text-white mb-2">Categories</p>
+                        <div class="flex flex-col space-y-2 pl-4">
+                            <a href="#watches" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Watches</a>
+                            <a href="#jewelry" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Jewelry</a>
+                            <a href="#gaming" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Gaming</a>
+                            <a href="#accessories" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition">Accessories</a>
+                        </div>
+                    </div>
+                    <button id="themeToggleMobile" class="text-left text-gray-800 dark:text-white hover:text-blue-600 transition">
+                        Toggle Theme
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-r from-gray-900 to-blue-900 text-white py-24 overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-40"></div>
+        <div class="absolute top-0 left-0 w-full h-full bg-[url'"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">Ruchil's <span class="gradient-text">Luxury</span> Collection</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto animate-fadeIn" style="animation-delay: 0.2s">Exclusive timepieces, fine jewelry, and elite gaming accessories for the discerning connoisseur.</p>
+            <div class="animate-fadeIn" style="animation-delay: 0.4s">
+                <a href="#watches" class="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-full font-medium inline-block transition duration-300 mr-4">Explore Watches</a>
+                <a href="#gaming" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 rounded-full font-medium inline-block transition duration-300">Gaming Elite</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIP Benefits Banner -->
+    <div class="bg-gradient-to-r from-purple-900 to-blue-900 text-white py-4">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center mb-4 md:mb-0">
+                <i class="fas fa-gem text-2xl mr-3"></i>
+                <p class="font-medium">Join our VIP program for exclusive benefits</p>
+            </div>
+            <button id="vipModalBtn" class="bg-white text-purple-900 hover:bg-gray-100 px-6 py-2 rounded-full font-medium text-sm transition duration-300">
+                Learn More
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-12">
+        <!-- Featured Section - Watches -->
+        <section id="watches" class="mb-20">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">Luxury Timepieces</h2>
+                <a href="#" class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400 font-medium">View All</a>
+            </div>
+            <div id="watchesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Watches will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Featured Section - Jewelry -->
+        <section id="jewelry" class="mb-20">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">Exquisite Jewelry</h2>
+                <a href="#" class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400 font-medium">View All</a>
+            </div>
+            <div id="jewelryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Jewelry will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Featured Section - Gaming -->
+        <section id="gaming" class="mb-20">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">Elite Gaming</h2>
+                <a href="#" class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400 font-medium">View All</a>
+            </div>
+            <div id="gamingContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Gaming products will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Featured Section - Accessories -->
+        <section id="accessories" class="mb-20">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">Luxury Accessories</h2>
+                <a href="#" class="text-blue-600 hover:text-blue-800 dark:hover:text-blue-400 font-medium">View All</a>
+            </div>
+            <div id="accessoriesContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Accessories will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Limited Edition Banner -->
+        <section class="mb-20 relative rounded-xl overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent z-10"></div>
+            <img src="https://www.shutterstock.com/shutterstock/videos/1111781573/thumb/1.jpg?ip=x480">
+            <div class="absolute inset-0 z-20 flex items-center">
+                <div class="container mx-auto px-4">
+                    <h3 class="text-2xl md:text-4xl font-bold text-white mb-4">Limited Edition Collection</h3>
+                    <p class="text-white mb-6 max-w-lg">Only 50 pieces worldwide. Handcrafted perfection for the true collector.</p>
+                    <button class="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-full font-medium transition duration-300">Explore Collection</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="mb-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-12 text-center">What Our Clients Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah J." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 dark:text-white">Chanel</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">"The Patek Philippe watch exceeded all expectations. The craftsmanship is impeccable and the service was exceptional."</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael T." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 dark:text-white">Michael T.</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">"The custom gaming setup transformed my experience. The attention to detail and premium components are worth every penny."</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma R." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 dark:text-white">Emma R.</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">"The diamond necklace was even more beautiful in person. The personal shopping experience made me feel truly valued."</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white dark:bg-gray-800 shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-white">Your Cart</h3>
+                <button id="closeCartBtn" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <div id="cartItems" class="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                <!-- Cart items will be loaded here by JavaScript -->
+                <p id="emptyCartMessage" class="text-gray-500 text-center py-8">Your cart is empty</p>
+            </div>
+
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300">Subtotal</span>
+                    <span id="cartSubtotal" class="font-medium text-gray-800 dark:text-white">$0.00</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300">Shipping</span>
+                    <span class="font-medium text-gray-800 dark:text-white">Calculated at checkout</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300">Tax</span>
+                    <span id="cartTax" class="font-medium text-gray-800 dark:text-white">$0.00</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold mb-6">
+                    <span class="text-gray-800 dark:text-white">Total</span>
+                    <span id="cartTotal" class="text-blue-600">$0.00</span>
+                </div>
+                <button id="checkoutBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition duration-300 mb-4">
+                    Proceed to Checkout
+                </button>
+                <p class="text-sm text-gray-500 text-center">Free worldwide shipping on orders over $5,000</p>
+            </div>
+        </div>
+    </div>
+    <div id="cartOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+    <!-- Product Details Modal -->
+    <div id="productModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full max-h-screen overflow-y-auto">
+                <button id="closeModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 z-10">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+                <div id="modalContent" class="p-6">
+                    <!-- Product details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIP Modal -->
+    <div id="vipModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full">
+                <button id="closeVipModalBtn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">VIP Membership Benefits</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-gem text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 dark:text-white mb-1">Exclusive Access</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">Early access to limited edition collections</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-percentage text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 dark:text-white mb-1">15% Discount</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">On all purchases for the first year</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-shipping-fast text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 dark:text-white mb-1">Free Express Shipping</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">On all orders with priority handling</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full mr-4">
+                                <i class="fas fa-user-shield text-blue-600 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800 dark:text-white mb-1">Personal Shopper</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">Dedicated concierge service</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="space-y-4">
+                        <div>
+                            <label for="vipEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                            <input type="email" id="vipEmail" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-md font-medium transition duration-300">
+                            Join VIP Program
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Ruchil's Shop</h4>
+                    <p class="mb-4">Curating the finest luxury goods for discerning clients worldwide since 1995.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 transition"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Shop</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#watches" class="hover:text-blue-600 transition">Luxury Watches</a></li>
+                        <li><a href="#jewelry" class="hover:text-blue-600 transition">Fine Jewelry</a></li>
+                        <li><a href="#gaming" class="hover:text-blue-600 transition">Elite Gaming</a></li>
+                        <li><a href="#accessories" class="hover:text-blue-600 transition">Accessories</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">Limited Editions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-600 transition">VIP Program</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">Personal Shopping</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">Custom Orders</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">Appraisal Services</a></li>
+                        <li><a href="#" class="hover:text-blue-600 transition">International Shipping</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">Contact</h4>
+                    <address class="not-italic mb-4">
+                        <p>Ruchil's Shop</p>
+                        <p>Mumbai</p>
+                        <p>Maharashtra, India</p>
+                        <p class="mt-2">+91 9082350862</p>
+                    </address>
+                    <button id="contactModalBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium text-sm transition duration-300">
+                        Contact Us
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p>&copy; 2023 Éclat Luxury. All rights reserved.</p>
+                    <div class="flex space-x-4 mt-4 md:mt-0">
+                        <a href="#" class="text-sm hover:text-blue-600 transition">Privacy Policy</a>
+                        <a href="#" class="text-sm hover:text-blue-600 transition">Terms of Service</a>
+                        <a href="#" class="text-sm hover:text-blue-600 transition">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced Product Data
+        const products = [
+            // Luxury Watches
+            {
+                id: 1,
+                name: "Patek Philippe Nautilus",
+                price: 45999,
+                category: "watches",
+                description: "The iconic Nautilus in 18k rose gold with a brown dial and matching bracelet.",
+                image: "https://hodinkee.imgix.net/uploads/images/a8e27c43-642f-4909-9b93-0fee4fbebcdc/PP_5711_1A_018copy.jpg?ixlib=rails-1.1.0&fm=jpg&q=55&auto=format&usm=12",
+                alt: "Patek Philippe Nautilus watch",
+                details: {
+                    movement: "Automatic Caliber 324 S C",
+                    case: "40mm 18k Rose Gold",
+                    waterResistance: "120m",
+                    features: ["Date display", "Sapphire crystal case back", "Power reserve ~45h"],
+                    materials: ["18k rose gold", "Sapphire crystal", "Alligator strap"],
+                    limited: true,
+                    stock: 3
+                }
+            },
+            {
+                id: 2,
+                name: "Rolex Daytona Platinum",
+                price: 78999,
+                category: "watches",
+                description: "The ultimate chronograph in 950 platinum with ice blue dial and ceramic bezel.",
+                image: "https://www.simoneventuresindia.com/wp-content/uploads/2025/04/m126506-0001_slide1.webp",
+                alt: "Rolex Daytona Platinum watch",
+                details: {
+                    movement: "Automatic Caliber 4130",
+                    case: "40mm 950 Platinum",
+                    waterResistance: "100m",
+                    features: ["Chronograph", "Tachymetric scale", "Oyster bracelet"],
+                    materials: ["950 platinum", "Cerachrom bezel", "Oystersteel"],
+                    limited: false,
+                    stock: 5
+                }
+            },
+            {
+                id: 3,
+                name: "Audemars Piguet Royal Oak",
+                price: 32999,
+                category: "watches",
+                description: "The legendary Royal Oak in stainless steel with blue Grande Tapisserie dial.",
+                image: "https://robbreport.com/wp-content/uploads/2018/07/roo_26421or-oo-a002ca-01_adv_sdt_prcmyk.jpg?w=1000",
+                alt: "Audemars Piguet Royal Oak watch",
+                details: {
+                    movement: "Automatic Caliber 4302",
+                    case: "41mm Stainless Steel",
+                    waterResistance: "50m",
+                    features: ["Date display", "Screw-lock crown", "Integrated bracelet"],
+                    materials: ["Stainless steel", "Sapphire crystal"],
+                    limited: false,
+                    stock: 7
+                }
+            },
+            {
+                id: 4,
+                name: "Richard Mille RM 011",
+                price: 125000,
+                category: "watches",
+                description: "Ultra-lightweight tourbillon chronograph with flyback function and annual calendar.",
+                image: "https://hodinkee.imgix.net/uploads/images/865cecef-6523-4622-849e-84141d44fa28/RM-hero-titanium.jpg?ixlib=rails-1.1.0&fm=jpg&q=55&auto=format&usm=12",
+                alt: "Richard Mille RM 011 watch",
+                details: {
+                    movement: "Automatic RMAC1",
+                    case: "42.7mm Carbon TPT",
+                    waterResistance: "50m",
+                    features: ["Flyback chronograph", "Annual calendar", "Variable geometry rotor"],
+                    materials: ["Carbon TPT", "Titanium", "Sapphire crystal"],
+                    limited: true,
+                    stock: 1
+                }
+            },
+            
+            // Fine Jewelry
+            {
+                id: 5,
+                name: "Diamond Solitaire Ring",
+                price: 29999,
+                category: "jewelry",
+                description: "Exquisite solitaire ring featuring a 3.5ct brilliant-cut diamond set in platinum.",
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                alt: "Diamond solitaire ring on a velvet display",
+                details: {
+                    stone: "3.5ct Round Brilliant Diamond",
+                    color: "D (Colorless)",
+                    clarity: "IF (Internally Flawless)",
+                    setting: "Four-prong platinum setting",
+                    materials: ["Platinum", "Diamond"],
+                    certification: "GIA Certified",
+                    stock: 2
+                }
+            },
+            {
+                id: 6,
+                name: "Sapphire Halo Necklace",
+                price: 18999,
+                category: "jewelry",
+                description: "Stunning 8ct blue sapphire pendant surrounded by diamonds on a platinum chain.",
+                image: "https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80",
+                alt: "Sapphire pendant necklace on display",
+                details: {
+                    stone: "8ct Ceylon Blue Sapphire",
+                    color: "Royal Blue",
+                    clarity: "VVS (Very Very Slightly Included)",
+                    setting: "Halo diamond setting",
+                    materials: ["Platinum", "Sapphire", "Diamonds"],
+                    chainLength: "18 inches",
+                    stock: 4
+                }
+            },
+            {
+                id: 7,
+                name: "Emerald Tennis Bracelet",
+                price: 45999,
+                category: "jewelry",
+                description: "Luxurious tennis bracelet with alternating emeralds and diamonds in platinum.",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsOA1E3geKsKVaEx8uItsXpLrYblRk7vv5kA&s",
+                alt: "Emerald and diamond tennis bracelet",
+                details: {
+                    stone: "Colombian Emeralds and Diamonds",
+                    color: "Vivid Green",
+                    clarity: "VS (Very Slightly Included)",
+                    setting: "Channel setting",
+                    materials: ["Platinum", "Emeralds", "Diamonds"],
+                    length: "7 inches (adjustable)",
+                    stock: 1
+                }
+            },
+            {
+                id: 8,
+                name: "Pearl Drop Earrings",
+                price: 8999,
+                category: "jewelry",
+                description: "Elegant South Sea pearl drop earrings with diamond accents in 18k white gold.",
+                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                alt: "Pearl drop earrings on a display stand",
+                details: {
+                    stone: "South Sea Pearls and Diamonds",
+                    pearlSize: "12mm",
+                    color: "White with rose overtone",
+                    setting: "Diamond cluster top",
+                    materials: ["18k white gold", "Pearls", "Diamonds"],
+                    back: "French wire",
+                    stock: 6
+                }
+            },
+            
+            // Elite Gaming
+            {
+                id: 9,
+                name: "Custom Gaming PC - Obsidian",
+                price: 15999,
+                category: "gaming",
+                description: "Fully custom liquid-cooled gaming PC with RGB lighting and premium components.",
+                image: "https://images.unsplash.com/photo-1591488320449-011701bb6704?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                alt: "Custom gaming PC with RGB lighting",
+                details: {
+                    processor: "Intel Core i9-13900KS",
+                    graphics: "NVIDIA RTX 4090 (24GB GDDR6X)",
+                    memory: "64GB DDR5 6000MHz",
+                    storage: "2TB NVMe SSD + 4TB HDD",
+                    cooling: "Custom hardline liquid cooling",
+                    case: "Lian Li PC-O11 Dynamic XL",
+                    warranty: "3 years parts and labor",
+                    stock: 3
+                }
+            },
+            {
+                id: 10,
+                name: "Gaming Pc",
+                price: 98000.99,
+                category: "gaming",
+                description: "Limited edition Gaming Pc plated in 24k gold with diamond accents.",
+                image: "https://themvp.in/catalog/view/assets/img/PC-S-Vimal-Kumar.webp",
+                alt: "Gold plated gaming controller",
+                details: {
+                    base: "DualSense Wireless Controller",
+                    plating: "24k gold electroplated",
+                    accents: "0.25ct diamonds on buttons",
+                    connectivity: "Bluetooth/USB-C",
+                    packaging: "Premium display case",
+                    limited: "Only 50 pieces worldwide",
+                    stock: 8
+                }
+            },
+            {
+                id: 11,
+                name: "Carbon Fiber Gaming Desk",
+                price: 8999,
+                category: "gaming",
+                description: "Ultra-premium carbon fiber gaming desk with built-in RGB lighting and cable management.",
+                image: "https://m.media-amazon.com/images/I/813wUbeKeIL.jpg",
+                alt: "Carbon fiber gaming desk",
+                details: {
+                    material: "Aerospace-grade carbon fiber",
+                    dimensions: "72\" x 30\" x 30\"",
+                    features: ["Built-in wireless charging", "RGB ambient lighting", "Cable management system"],
+                    weightCapacity: "300 lbs",
+                    accessories: "Matching carbon fiber chair available",
+                    assembly: "Professional installation included",
+                    stock: 2
+                }
+            },
+            {
+                id: 12,
+                name: "8K OLED Gaming Monitor",
+                price: 12999,
+                category: "gaming",
+                description: "48\" 8K OLED gaming monitor with 120Hz refresh rate and HDR10+ support.",
+                image: "https://www.lg.com/content/dam/channel/wcms/in/monitors/ultragear-npi/mnt-ultragear-27gs95qe-lg-com-kit/gallery/02-gallery/ultragear-27gs95qe-galley-02-2010.jpg/_jcr_content/renditions/thum-1600x1062.jpeg",
+                alt: "8K OLED gaming monitor",
+                details: {
+                    display: "48\" OLED",
+                    resolution: "7680 x 4320 (8K)",
+                    refreshRate: "120Hz",
+                    responseTime: "0.1ms",
+                    features: ["HDR10+", "G-Sync Ultimate", "6x HDMI 2.1"],
+                    connectivity: "DisplayPort 1.4, USB-C",
+                    warranty: "3 years with burn-in protection",
+                    stock: 5
+                }
+            },
+            
+            // Luxury Accessories
+            {
+                id: 13,
+                name: "AC MILAN 2005/2006 HOME",
+                price: 779.99,
+                category: "accessories",
+                description: "Handcrafted briefcase in genuine alligator skin with platinum hardware.",
+                image: "https://stunner.store/cdn/shop/files/AC_MILAN_2005_2006_HOME_SHIRT_3_MALDINI.jpg?v=1738095184",
+                alt: "AC MILAN 2005/2006 HOME",
+                details: {
+                    material: "Genuine alligator skin",
+                    color: "Cognac",
+                    hardware: "Platinum-plated",
+                    interior: "Suede lining",
+                    dimensions: "18\" x 12\" x 5\"",
+                    features: ["Combination lock", "Document pocket", "Pen holder"],
+                    stock: 3
+                }
+            },
+            {
+                id: 14,
+                name: "Solid Gold Fountain Pen",
+                price: 5999,
+                category: "accessories",
+                description: "18k solid gold fountain pen with rhodium-plated nib, hand-engraved details.",
+                image: "https://writingwonders.in/cdn/shop/files/Sheaffer1009372DiamondFP1.webp?v=1729602681",
+                alt: "Solid gold fountain pen",
+                details: {
+                    material: "18k solid gold",
+                    nib: "Rhodium-plated 18k gold",
+                    filling: "Piston filler",
+                    engraving: "Custom hand engraving available",
+                    packaging: "Lacquer display box",
+                    warranty: "Lifetime mechanical",
+                    stock: 7
+                }
+            },
+            {
+                id: 15,
+                name: "Diamond Encrusted Sunglasses",
+                price: 24999,
+                category: "accessories",
+                description: "Aviator sunglasses with 5ct of pave-set diamonds on 18k gold frames.",
+                image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80",
+                alt: "Diamond encrusted sunglasses",
+                details: {
+                    frame: "18k gold",
+                    lenses: "Polarized sapphire crystal",
+                    diamonds: "5ct total weight (VS clarity)",
+                    style: "Aviator",
+                    case: "Handmade leather with suede lining",
+                    limited: "Only 10 pairs made",
+                    stock: 2
+                }
+            },
+            {
+                id: 16,
+                name: "Platinum Money Clip",
+                price: 3999,
+                category: "accessories",
+                description: "Solid platinum money clip with hand-engraved monogram option.",
+                image: "https://a.1stdibscdn.com/archivesE/upload/1121189/j_134204121632845929885/13420412_datamatics.jpg",
+                alt: "Platinum money clip",
+                details: {
+                    material: "Solid platinum (950)",
+                    weight: "28 grams",
+                    engraving: "Free monogram engraving",
+                    packaging: "Velvet gift box",
+                    dimensions: "2.5\" x 1.25\"",
+                    warranty: "Lifetime guarantee",
+                    stock: 10
+                }
+            }
+        ];
+
+        // Cart and Wishlist functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
+        
+        // DOM Elements
+        const productsContainer = document.getElementById('productsContainer');
+        const watchesContainer = document.getElementById('watchesContainer');
+        const jewelryContainer = document.getElementById('jewelryContainer');
+        const gamingContainer = document.getElementById('gamingContainer');
+        const accessoriesContainer = document.getElementById('accessoriesContainer');
+        const cartItems = document.getElementById('cartItems');
+        const cartCount = document.getElementById('cartCount');
+        const cartCountMobile = document.getElementById('cartCountMobile');
+        const wishlistCount = document.getElementById('wishlistCount');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const cartTax = document.getElementById('cartTax');
+        const cartTotal = document.getElementById('cartTotal');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const viewCartBtn = document.getElementById('viewCartBtn');
+        const viewCartBtnMobile = document.getElementById('viewCartBtnMobile');
+        const wishlistBtn = document.getElementById('wishlistBtn');
+        const closeCartBtn = document.getElementById('closeCartBtn');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeToggleMobile = document.getElementById('themeToggleMobile');
+        const cookieConsent = document.getElementById('cookieConsent');
+        const cookieAccept = document.getElementById('cookieAccept');
+        const cookieDecline = document.getElementById('cookieDecline');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const productModal = document.getElementById('productModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const vipModal = document.getElementById('vipModal');
+        const vipModalBtn = document.getElementById('vipModalBtn');
+        const closeVipModalBtn = document.getElementById('closeVipModalBtn');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load products by category
+            renderProductsByCategory('watches', watchesContainer);
+            renderProductsByCategory('jewelry', jewelryContainer);
+            renderProductsByCategory('gaming', gamingContainer);
+            renderProductsByCategory('accessories', accessoriesContainer);
+            
+            // Update cart and wishlist counts
+            updateCartCount();
+            updateWishlistCount();
+            
+            // Check theme preference
+            checkTheme();
+            
+            // Check cookie consent
+            checkCookieConsent();
+            
+            // Simulate loading
+            simulateLoading();
+            
+            // Check for recently viewed products
+            if (recentlyViewed.length > 0) {
+                showToast(`Welcome back! Continue browsing your recently viewed items`, 'info');
+            }
+        });
+
+        // Simulate loading for demo purposes
+        function simulateLoading() {
+            loadingSpinner.classList.remove('hidden');
+            setTimeout(() => {
+                loadingSpinner.classList.add('hidden');
+            }, 1200);
+        }
+
+        // Render products by category
+        function renderProductsByCategory(category, container) {
+            container.innerHTML = '';
+            
+            const categoryProducts = products.filter(product => product.category === category);
+            
+            categoryProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-md border border-gray-200 dark:border-gray-600';
+                productCard.innerHTML = `
+                    ${product.details.limited ? '<div class="discount-badge">LIMITED</div>' : ''}
+                    <div class="relative overflow-hidden h-64 cursor-pointer" onclick="showProductDetails(${product.id})">
+                        <img src="${product.image}" alt="${product.alt}" class="w-full h-full object-cover transition duration-300 hover:scale-105">
+                        <button class="absolute top-2 right-2 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition" onclick="event.stopPropagation();addToWishlist(${product.id})">
+                            <i class="far fa-heart text-gray-600 dark:text-gray-300"></i>
+                        </button>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white cursor-pointer" onclick="showProductDetails(${product.id})">${product.name}</h3>
+                            <span class="text-lg font-bold text-blue-600">$${product.price.toLocaleString()}</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">${product.description}</p>
+                        <div class="flex space-x-2">
+                            <button onclick="event.stopPropagation();addToCart(${product.id})" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition duration-300">
+                                Add to Cart
+                            </button>
+                            <button onclick="event.stopPropagation();showProductDetails(${product.id})" class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white py-2 px-3 rounded transition duration-300">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(productCard);
+            });
+        }
+
+        // Show product details modal
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            // Add to recently viewed
+            if (!recentlyViewed.includes(productId)) {
+                recentlyViewed.unshift(productId);
+                if (recentlyViewed.length > 5) {
+                    recentlyViewed.pop();
+                }
+                localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+            }
+            
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="relative">
+                        <img src="${product.image}" alt="${product.alt}" class="w-full rounded-lg shadow-md">
+                        ${product.details.limited ? '<div class="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">LIMITED EDITION</div>' : ''}
+                    </div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-2">${product.name}</h2>
+                        <div class="flex items-center mb-4">
+                            <div class="flex text-yellow-400 mr-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-300 text-sm">(12 reviews)</span>
+                        </div>
+                        <p class="text-3xl font-bold text-blue-600 mb-6">$${product.price.toLocaleString()}</p>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">${product.description}</p>
+                        
+                        ${product.category === 'watches' ? `
+                        <div class="mb-6">
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-2">Specifications</h3>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Movement</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.movement}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Case</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.case}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Water Resistance</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.waterResistance}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Features</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.features.join(', ')}</p>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${product.category === 'jewelry' ? `
+                        <div class="mb-6">
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-2">Details</h3>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Primary Stone</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.stone}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Color</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.color}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Clarity</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.clarity}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Setting</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.setting}</p>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${product.category === 'gaming' ? `
+                        <div class="mb-6">
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-2">Specifications</h3>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Processor</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.processor}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Graphics</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.graphics}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Memory</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.memory}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Storage</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.storage}</p>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        ${product.category === 'accessories' ? `
+                        <div class="mb-6">
+                            <h3 class="font-bold text-gray-800 dark:text-white mb-2">Details</h3>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Material</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.material}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Dimensions</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.dimensions}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Features</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.features.join(', ')}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400">Warranty</p>
+                                    <p class="text-gray-800 dark:text-white">${product.details.warranty}</p>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div class="flex space-x-4">
+                            <button onclick="addToCart(${product.id})" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition duration-300">
+                                Add to Cart - $${product.price.toLocaleString()}
+                            </button>
+                            <button onclick="addToWishlist(${product.id})" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white py-3 px-4 rounded-lg transition duration-300">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        ${product.details.stock < 5 ? `
+                        <div class="mt-4 text-sm text-red-500 dark:text-red-400">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Only ${product.details.stock} left in stock!
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            productModal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        // Close product modal
+        function closeProductModal() {
+            productModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // VIP Modal
+        function toggleVipModal() {
+            vipModal.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        // Add to cart function
+        function addToCart(productId) {
+            // Show loading spinner
+            loadingSpinner.classList.remove('hidden');
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                const product = products.find(p => p.id === productId);
+                const existingItem = cart.find(item => item.id === productId);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        ...product,
+                        quantity: 1
+                    });
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+                
+                // Update UI
+                updateCartCount();
+                renderCartItems();
+                
+                // Hide loading spinner
+                loadingSpinner.classList.add('hidden');
+                
+                // Show success message
+                showToast(`${product.name} added to cart`);
+                
+                // Open cart if on mobile
+                if (window.innerWidth < 768) {
+                    toggleCart();
+                }
+            }, 800);
+        }
+
+        // Add to wishlist function
+        function addToWishlist(productId) {
+            if (!wishlist.includes(productId)) {
+                wishlist.push(productId);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                updateWishlistCount();
+                
+                const product = products.find(p => p.id === productId);
+                showToast(`${product.name} added to wishlist`);
+            } else {
+                wishlist = wishlist.filter(id => id !== productId);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                updateWishlistCount();
+                
+                const product = products.find(p => p.id === productId);
+                showToast(`${product.name} removed from wishlist`, 'info');
+            }
+        }
+
+        // Remove from cart function
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderCartItems();
+            
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+            }
+        }
+
+        // Update quantity in cart
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity < 1) return;
+            
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = newQuantity;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCartItems();
+            }
+        }
+
+        // Update cart count in UI
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+            cartCountMobile.textContent = count;
+        }
+
+        // Update wishlist count in UI
+        function updateWishlistCount() {
+            wishlistCount.textContent = wishlist.length;
+        }
+
+        // Render cart items in sidebar
+        function renderCartItems() {
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                cartSubtotal.textContent = '$0.00';
+                cartTax.textContent = '$0.00';
+                cartTotal.textContent = '$0.00';
+                return;
+            }
+            
+            emptyCartMessage.classList.add('hidden');
+            
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg';
+                cartItem.innerHTML = `
+                    <div class="flex-shrink-0 w-16 h-16">
+                        <img src="${item.image}" alt="${item.alt}" class="w-full h-full object-cover rounded">
+                    </div>
+                    <div class="ml-4 flex-grow">
+                        <h4 class="text-sm font-medium text-gray-800 dark:text-white">${item.name}</h4>
+                        <div class="flex items-center mt-1">
+                            <span class="text-sm text-gray-600 dark:text-gray-300">$${item.price.toLocaleString()}</span>
+                            <span class="mx-2 text-gray-400">×</span>
+                            <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded">
+                                <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})" class="px-2 py-1 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600" ${item.quantity === 1 ? 'disabled' : ''}>
+                                    <i class="fas fa-minus text-xs"></i>
+                                </button>
+                                <span class="px-2 text-sm text-gray-800 dark:text-white">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})" class="px-2 py-1 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-4 flex flex-col items-end">
+                        <span class="text-sm font-medium text-gray-800 dark:text-white">$${(item.price * item.quantity).toLocaleString()}</span>
+                        <button onclick="removeFromCart(${item.id})" class="mt-1 text-red-500 hover:text-red-700 dark:hover:text-red-400 text-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            const tax = subtotal * 0.1; // 10% tax for demo
+            const total = subtotal + tax;
+            
+            cartSubtotal.textContent = `$${subtotal.toLocaleString()}`;
+            cartTax.textContent = `$${tax.toLocaleString()}`;
+            cartTotal.textContent = `$${total.toLocaleString()}`;
+        }
+
+        // Toggle cart sidebar
+        function toggleCart() {
+            cartSidebar.classList.toggle('translate-x-full');
+            cartOverlay.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        // Check theme preference
+        function checkTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            if (savedTheme === 'dark') {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                themeToggleMobile.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                themeToggleMobile.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'dark') {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                themeToggleMobile.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>'
+                    themeToggleMobile.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        // Check cookie consent
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                setTimeout(() => {
+                    cookieConsent.classList.remove('hidden');
+                }, 2000);
+            }
+        }
+
+        // Handle cookie consent
+        function handleCookieConsent(accepted) {
+            localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined');
+            cookieConsent.classList.add('hidden');
+            
+            if (accepted) {
+                // Initialize analytics if accepted
+                gtag('consent', 'update', {
+                    'analytics_storage': 'granted'
+                });
+                showToast('Cookie preferences saved', 'success');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white ${
+                type === 'success' ? 'bg-green-600' : 
+                type === 'error' ? 'bg-red-600' : 
+                'bg-blue-600'
+            } z-50 animate-fadeIn`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${
+                        type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 
+                        'fa-info-circle'
+                    } mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('open');
+        }
+
+        // Event listeners
+        viewCartBtn.addEventListener('click', toggleCart);
+        viewCartBtnMobile.addEventListener('click', toggleCart);
+        closeCartBtn.addEventListener('click', toggleCart);
+        cartOverlay.addEventListener('click', toggleCart);
+        checkoutBtn.addEventListener('click', () => {
+            toggleCart();
+            showToast('Proceeding to checkout', 'info');
+        });
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        themeToggle.addEventListener('click', toggleTheme);
+        themeToggleMobile.addEventListener('click', toggleTheme);
+        cookieAccept.addEventListener('click', () => handleCookieConsent(true));
+        cookieDecline.addEventListener('click', () => handleCookieConsent(false));
+        closeModalBtn.addEventListener('click', closeProductModal);
+        closeVipModalBtn.addEventListener('click', toggleVipModal);
+        vipModalBtn.addEventListener('click', toggleVipModal);
+
+        // Make functions available globally
+        window.addToCart = addToCart;
+        window.addToWishlist = addToWishlist;
+        window.removeFromCart = removeFromCart;
+        window.updateQuantity = updateQuantity;
+        window.showProductDetails = showProductDetails;
+        window.closeProductModal = closeProductModal;
+        window.toggleVipModal = toggleVipModal;
+    </script>
+</body>
+</html>
